@@ -11,14 +11,22 @@ let spotify = new Spotify(keys.spotify);
 let command = process.argv[2];
 
 switch(command) {
-    case "my-tweets" : callTweets();
-    case "spotify-this-song" : callSpotify();
-    case "movie-this" : callOMDB();
-    case "do-what-it-says" : callRandom();
+    case "my-tweets" : 
+    callTweets();
+    break;
+    case "spotify-this-song" : 
+    callSpotify();
+    break;
+    case "movie-this" : 
+    callOMDB();
+    break;
+    case "do-what-it-says" : 
+    callRandom();
+    break;
     default : console.log("Invalid command! Beep boop. LIRI does not compute.");
 }
 
-let callTweets = function() {
+function callTweets() {
         client.get('statuses/user_timeline', {screen_name: 'twitterapi', count: '20'}, function(error, tweets, response) {
             if (error) {
                 throw error;
@@ -27,7 +35,7 @@ let callTweets = function() {
         })
 }
 
-let callSpotify = function() {
+function callSpotify() {
         if (typeof process.argv[3] === 'undefined') {
             spotify.search({type: 'track', query: 'the sign ace of base'}, function(error, data) {
                 if (error) {
@@ -46,7 +54,7 @@ let callSpotify = function() {
         }
 }
 
-let callOMDB = function() {
+function callOMDB() {
         if (typeof process.argv[3] === 'undefined') {
             request("http://www.omdbapi.com/?apikey=c33bdeed&t=mr+nobody", function(error, response, body) {
                 if (!error && response.statusCode === 200) {
@@ -67,6 +75,11 @@ let callOMDB = function() {
         }
 }
 
-let callRandom = function() {
-
+function callRandom() {
+    fs.readFile('./random.txt', function(error, data) {
+        if (error) {
+            throw error;
+        }
+        let randCommand = data;
+    })
 }
