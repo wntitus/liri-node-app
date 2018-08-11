@@ -34,4 +34,24 @@ if (command === "my-tweets") {
             console.log(data.tracks.items[0]);
         })
     }
-} 
+} else if (command === "movie-this") {
+    if (typeof process.argv[3] === 'undefined') {
+        request("http://www.omdbapi.com/?apikey=c33bdeed&t=mr+nobody", function(error, response, body) {
+            if (!error && response.statusCode === 200) {
+                console.log(JSON.parse(body, null, 2));
+            } else if (error) {
+                throw error;
+            }
+        })
+    } else {
+        let movieQuery = process.argv[3];
+        request("http://www.omdbapi.com/?apikey=c33bdeed&t=" + movieQuery, function(error, response, body) {
+            if (!error && response.statusCode === 200) {
+                console.log(JSON.parse(body, null, 2));
+            } else if (error) {
+                throw error;
+            }
+        })
+    }
+
+}
