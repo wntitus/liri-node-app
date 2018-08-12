@@ -9,7 +9,7 @@ to choose from.
 * Read first 20 tweets of specified Twitter screen name (currently twitterapi)
   ![Tweet Demo](assets/tweetdemo.gif)
 * Search for a specified song from the Spotify API
-  ![Spotify Demo](assets/spotifydemo.gif)
+  ![Spotify Demo](https://imgur.com/a/fZVmWf2.gif)
 * Search for a specified movie from the OMDB API
   ![Movie Demo](assets/moviedemo.gif)
 * Execute one random command placed into the random.txt file
