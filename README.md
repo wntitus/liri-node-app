@@ -1,4 +1,5 @@
-# LiriBOT
+# LiriBOT  
+## (Language Interpretation and Recognition Interface)
 
 **8/12/18** Update: LIRI no longer takes command line arguments. Instead, simply running "node liri.js" will display a list of options
 to choose from.  
