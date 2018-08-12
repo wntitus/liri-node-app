@@ -10,6 +10,11 @@ const inquirer = require('inquirer');
 const client = new Twitter(keys.twitter);
 const spotify = new Spotify(keys.spotify);
 
+let date = new Date();
+let hours = date.getHours();
+let minutes = date.getMinutes();
+let seconds = date.getSeconds();
+
 const liriResponse = chalk.blue;
 
 
@@ -21,6 +26,11 @@ function liriBot(arg, arg2) {
                 }
                 console.log(tweets);
                 console.log(liriResponse("Here's some tweets! Hope you enjoy them, we had to work hard to get them!"));
+                fs.appendFile("log.txt", "\n" + hours + ":" + minutes + ":" + seconds + "---" + "Tweet Query" + "===" + JSON.stringify(tweets, null, 2), function(error) {
+                    if (error) {
+                        throw error
+                    }
+                });
             })
     }
 
@@ -32,6 +42,11 @@ function liriBot(arg, arg2) {
                     }
                     console.log(data.tracks.items[0]);
                     console.log(liriResponse("You wanted Ace of Base, right? No?"));
+                    fs.appendFile("log.txt", "\n" +hours + ":" + minutes + ":" + seconds + "---" + "Song Query" + "===" + JSON.stringify(data.tracks.items[0], null, 2), function(error) {
+                        if (error) {
+                            throw error
+                        } 
+                    })
                 }) 
             } else {
 
@@ -41,6 +56,11 @@ function liriBot(arg, arg2) {
                     }
                     console.log(data.tracks.items[0]);
                     console.log(liriResponse("Here's the song you wanted!"));
+                    fs.appendFile("log.txt", "\n" + hours + ":" + minutes + ":" + seconds + "---" + "Song Query" + "===" + JSON.stringify(data.tracks.items[0], null, 2), function(error) {
+                        if (error) {
+                            throw error
+                        }
+                    })
                 })
             }
     }
@@ -51,6 +71,11 @@ function liriBot(arg, arg2) {
                     if (!error && response.statusCode === 200) {
                         console.log(JSON.parse(body, null, 2));
                         console.log(liriResponse("I guess this is what you wanted!"));
+                        fs.appendFile("log.txt", "\n" + hours + ":" + minutes + ":" + seconds + "---" + "Movie Query" + "===" + JSON.stringify(body, null, 4), function(error) {
+                            if (error) {
+                                throw error;
+                            }
+                        })
                     } else if (error) {
                         throw error;
                     }
@@ -61,6 +86,11 @@ function liriBot(arg, arg2) {
                     if (!error && response.statusCode === 200) {
                         console.log(JSON.parse(body, null, 2));
                         console.log(liriResponse("Solid choice!"));
+                        fs.appendFile("log.txt", "\n" + hours + ":" + minutes + ":" + seconds + "---" + "Movie Query" + "===" + JSON.stringify(body, null, 2), function(error) {
+                            if (error) {
+                                throw error;
+                            }
+                        })
                     } else if (error) {
                         throw error;
                     }
@@ -80,6 +110,16 @@ function liriBot(arg, arg2) {
             })
     }
 
+    if (arg === 'remove') {
+        fs.unlink('./log.txt', function(error) {
+            if (error) {
+                throw error
+            } else {
+                console.log(liriResponse("Log successfully deleted!"));
+            }
+        })
+    }
+
 }
 
 
@@ -92,7 +132,9 @@ inquirer.prompt({
         'Print tweets',
         'Search Spotify for song info',
         'Search OMDB for movie info',
-        'Do what it says!'
+        'Do what it says!',
+        'Remove the log file'
+
     ]
 }).then(function(cmdChoice) {
     if (cmdChoice.choice === 'Print tweets') {
@@ -123,5 +165,7 @@ inquirer.prompt({
         })
     } else if (cmdChoice.choice === 'Do what it says!') {
         liriBot('do-what-it-says');
+    } else if (cmdChoice.choice === 'Remove the log file') {
+        liriBot('remove');
     }
 })
