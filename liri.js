@@ -1,12 +1,15 @@
 require("dotenv").config();
-let keys = require('./keys');
-let Twitter = require('twitter');
-let Spotify = require('node-spotify-api');
-let request = require('request');
-let fs = require('fs');
+const keys = require('./keys');
+const Twitter = require('twitter');
+const Spotify = require('node-spotify-api');
+const request = require('request');
+const fs = require('fs');
+const chalk = require('chalk');
 
-let client = new Twitter(keys.twitter);
-let spotify = new Spotify(keys.spotify);
+const client = new Twitter(keys.twitter);
+const spotify = new Spotify(keys.spotify);
+
+const liriResponse = chalk.blue;
 
 let command = process.argv[2];
 let secondQuery = process.argv[3];
@@ -18,6 +21,7 @@ function liriBot(arg, arg2) {
                     throw error;
                 }
                 console.log(tweets);
+                console.log(liriResponse("Here's some tweets! Hope you enjoy them, we had to work hard to get them!"));
             })
     }
 
@@ -28,6 +32,7 @@ function liriBot(arg, arg2) {
                         throw error;
                     }
                     console.log(data.tracks.items[0]);
+                    console.log(liriResponse("You wanted Ace of Base, right? No?"));
                 }) 
             } else {
 
@@ -36,6 +41,7 @@ function liriBot(arg, arg2) {
                         throw error;
                     }
                     console.log(data.tracks.items[0]);
+                    console.log(liriResponse("Here's the song you wanted!"));
                 })
             }
     }
@@ -45,6 +51,7 @@ function liriBot(arg, arg2) {
                 request("http://www.omdbapi.com/?apikey=c33bdeed&t=mr+nobody", function(error, response, body) {
                     if (!error && response.statusCode === 200) {
                         console.log(JSON.parse(body, null, 2));
+                        console.log(liriResponse("I guess this is what you wanted!"));
                     } else if (error) {
                         throw error;
                     }
@@ -54,6 +61,7 @@ function liriBot(arg, arg2) {
                 request("http://www.omdbapi.com/?apikey=c33bdeed&t=" + arg2, function(error, response, body) {
                     if (!error && response.statusCode === 200) {
                         console.log(JSON.parse(body, null, 2));
+                        console.log(liriResponse("Solid choice!"));
                     } else if (error) {
                         throw error;
                     }
@@ -69,7 +77,12 @@ function liriBot(arg, arg2) {
                 let dataArr = data.split(",");
                 console.log(dataArr);
                 liriBot(dataArr[0], dataArr[1]);
+                console.log(liriResponse("I did what it says!"))
             })
+    }
+
+    if (!arg) {
+        console.log(chalk.red.bold("Invalid command! Beep boop, LIRI does not compute."));
     }
 }
 

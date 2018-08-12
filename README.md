@@ -21,4 +21,5 @@ This is a small command line "bot" using Node.js. It can:
 DotEnv,
 Twitter,
 Node-Spotify-API,
-Request
+Request,
+Chalk
