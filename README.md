@@ -15,7 +15,8 @@ to choose from.
   ![Movie Demo](assets/moviedemo.gif)
 * Execute one random command placed into the random.txt file
   ![Random Demo](assets/randomdemo.gif)
-* Delete the log file
+* Delete the log file  
+
   ![Deletion Demo](assets/deletedemo.gif)
 
 *You will need to provide your own API keys for requests.*
