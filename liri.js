@@ -5,17 +5,16 @@ const Spotify = require('node-spotify-api');
 const request = require('request');
 const fs = require('fs');
 const chalk = require('chalk');
+const inquirer = require('inquirer');
 
 const client = new Twitter(keys.twitter);
 const spotify = new Spotify(keys.spotify);
 
 const liriResponse = chalk.blue;
 
-let command = process.argv[2];
-let secondQuery = process.argv[3];
 
 function liriBot(arg, arg2) {
-    if (arg === 'my-tweets') {
+    if (arg === 'tweets') {
             client.get('statuses/user_timeline', {screen_name: 'twitterapi', count: '20'}, function(error, tweets, response) {
                 if (error) {
                     throw error;
@@ -25,7 +24,7 @@ function liriBot(arg, arg2) {
             })
     }
 
-    if (arg === 'spotify-this-song') {
+    if (arg === 'spotify') {
             if (typeof arg2 === 'undefined') {
                 spotify.search({type: 'track', query: 'the sign ace of base'}, function(error, data) {
                     if (error) {
@@ -46,7 +45,7 @@ function liriBot(arg, arg2) {
             }
     }
 
-    if (arg === 'movie-this') {
+    if (arg === 'movie') {
             if (typeof arg2 === 'undefined') {
                 request("http://www.omdbapi.com/?apikey=c33bdeed&t=mr+nobody", function(error, response, body) {
                     if (!error && response.statusCode === 200) {
@@ -81,11 +80,48 @@ function liriBot(arg, arg2) {
             })
     }
 
-    if (!arg) {
-        console.log(chalk.red.bold("Invalid command! Beep boop, LIRI does not compute."));
-    }
 }
 
-liriBot(command, secondQuery);
 
 
+inquirer.prompt({
+    type : 'list',
+    name : 'choice',
+    message : 'What action would you like me to perform?',
+    choices : [
+        'Print tweets',
+        'Search Spotify for song info',
+        'Search OMDB for movie info',
+        'Do what it says!'
+    ]
+}).then(function(cmdChoice) {
+    if (cmdChoice.choice === 'Print tweets') {
+        liriBot('tweets');
+    } else if (cmdChoice.choice === 'Search Spotify for song info') {
+        inquirer.prompt({
+            type : 'input',
+            name : 'songChoice',
+            message : "What song?"
+        }).then(function(userSong) {
+            if (userSong.songChoice === '') {
+                liriBot('spotify');
+            } else {
+                liriBot('spotify', userSong.songChoice);
+            }
+        })
+    } else if (cmdChoice.choice === 'Search OMDB for movie info') {
+        inquirer.prompt({
+            type : 'input',
+            name : 'movieChoice',
+            message : "What movie?"
+        }).then(function(userMovie) {
+            if (userMovie.movieChoice === '') {
+                liriBot('movie');
+            } else {
+                liriBot('movie', userMovie.movieChoice);
+            }
+        })
+    } else if (cmdChoice.choice === 'Do what it says!') {
+        liriBot('do-what-it-says');
+    }
+})
